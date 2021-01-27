@@ -26,12 +26,7 @@
               </p>
               <h3>Программа</h3>
               <div class="meetup-agenda">
-                <p
-                  v-if="agenda && agenda.length < 1"
-                  class="meetup-agenda__empty"
-                >
-                  no items
-                </p>
+                <p v-if="agenda && agenda.length < 1" class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
                 <div class="meetup-agenda__item" v-for="event in agenda">
                   <div class="meetup-agenda__item-col">
                     <img
