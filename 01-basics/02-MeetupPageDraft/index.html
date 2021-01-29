@@ -18,7 +18,7 @@
   <body>
     <div id="app" v-cloak>
       <div v-if="meetup">
-        <div class="meetup-cover" :style="{backgroundImage: makeMeetupCoverLink(meetup.imageId)}">
+        <div class="meetup-cover" :style="{backgroundImage: meetup.cover}">
           <h1 class="meetup-cover__title">{{ meetup.title }}</h1>
         </div>
 

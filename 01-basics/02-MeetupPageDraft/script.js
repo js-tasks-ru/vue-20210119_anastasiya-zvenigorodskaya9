@@ -63,9 +63,8 @@ export const app = new Vue({
       },
     );
     this.rawMeetup.time = getTimeString(new Date(this.rawMeetup.date));
-    console.log('obj', this.rawMeetup);
+    this.rawMeetup.cover = `url(${API_URL}/images/${this.rawMeetup.imageId})`;
     return this.rawMeetup;
-
   },
   computed: {
     meetup() {
@@ -73,23 +72,10 @@ export const app = new Vue({
     },
   },
 
-  // methods: {
-  //   fetchData() {
-  //     return fetch(`${API_URL}/meetups/${MEETUP_ID}`).then((res) => res.json());
-  //   },
-  //   makeMeetupCoverLink(imageId) {
-  //     return ${API_URL}/images/${imageId};
-  //   },
-  // },
-
-  // async created() {
-  //   this.rawMeetup = await this.fetchData();
-  // },
-
   methods: {
-    makeMeetupCoverLink(imageId) {
-      return `url(${API_URL}/images/${imageId})`;
-    },
+    // makeMeetupCoverLink(imageId) {
+    //   return `url(${API_URL}/images/${imageId})`;
+    // },
     getMeetupData() {
       // let obj = this.rawMeetup;
       // console.log(obj);
