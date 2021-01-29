@@ -18,7 +18,7 @@
   <body>
     <div id="app" v-cloak>
       <div v-if="meetup">
-        <div class="meetup-cover" :style="{backgroundImage: meetup.cover}">
+        <div class="meetup-cover" :style="{backgroundImage: meetupCover}">
           <h1 class="meetup-cover__title">{{ meetup.title }}</h1>
         </div>
 
@@ -26,7 +26,9 @@
           <div class="meetup">
             <div class="meetup__content">
               <h3 v-if="meetup.description">Описание</h3>
-              <p v-if="meetup.description" class="meetup-description">{{ meetup.description }}</p>
+              <p v-if="meetup.description" class="meetup-description">
+                {{ meetup.description }}
+              </p>
 
               <h3>Программа</h3>
               <div class="meetup-agenda">
@@ -36,25 +38,34 @@
                 </p>
                 <template v-else>
                   <div
-                    v-for="event in meetup.agenda"
+                    v-for="agendaItem in meetup.agenda"
                     class="meetup-agenda__item"
                   >
                     <div class="meetup-agenda__item-col">
                       <img
                         class="icon"
                         alt="icon"
-                        src="/assets/icons/icon-cal-sm.svg"
+                        :src="'/assets/icons/icon-' + agendaItemIcons[agendaItem.type] + '.svg'"
                       />
                     </div>
-                    <div class="meetup-agenda__item-col">{{ event.startsAt }} - {{ event.endsAt }}</div>
                     <div class="meetup-agenda__item-col">
-                      <h5 class="meetup-agenda__title">{{ event.title }}</h5>
-                      <p v-if="event.type === 'talk'">
-                        <span>{{ event.speaker }}</span
+                      {{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}
+                    </div>
+                    <div class="meetup-agenda__item-col">
+                      <h5 class="meetup-agenda__title">
+                        {{ agendaItemIcons[agendaItem.type] }} {{
+                        agendaItem.title || agendaItemTitles[agendaItem.type] }}
+                      </h5>
+                      <p v-if="agendaItem.type === 'talk'">
+                        <span>{{ agendaItem.speaker }}</span
                         ><span class="meetup-agenda__dot"></span
-                        ><span class="meetup-agenda__lang">{{ event.language }}</span>
+                        ><span class="meetup-agenda__lang"
+                          >{{ agendaItem.language }}</span
+                        >
                       </p>
-                      <p v-if="event.description">{{ event.description }}</p>
+                      <p v-if="agendaItem.description">
+                        {{ agendaItem.description }}
+                      </p>
                     </div>
                   </div>
                 </template>
@@ -85,7 +96,9 @@
                     alt="icon"
                     src="/assets/icons/icon-cal-lg.svg"
                   />
-                  <time datetime="2020-02-31">{{ meetup.localeDate }} - {{ meetup.time }}</time>
+                  <time :datetime="meetup.date"
+                    >{{ localDate }} - {{ meetupTime }}</time
+                  >
                 </li>
               </ul>
             </div>
