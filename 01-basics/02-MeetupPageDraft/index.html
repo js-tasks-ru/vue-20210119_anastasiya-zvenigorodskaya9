@@ -25,8 +25,8 @@
         <div class="container">
           <div class="meetup">
             <div class="meetup__content">
-              <h3>Описание</h3>
-              <p class="meetup-description">{{ meetup.description }}</p>
+              <h3 v-if="meetup.description">Описание</h3>
+              <p v-if="meetup.description" class="meetup-description">{{ meetup.description }}</p>
 
               <h3>Программа</h3>
               <div class="meetup-agenda">
@@ -54,7 +54,7 @@
                         ><span class="meetup-agenda__dot"></span
                         ><span class="meetup-agenda__lang">{{ event.language }}</span>
                       </p>
-                      <p>{{ event.description }}</p>
+                      <p v-if="event.description">{{ event.description }}</p>
                     </div>
                   </div>
                 </template>
