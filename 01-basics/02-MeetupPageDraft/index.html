@@ -9,11 +9,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="/assets/styles/index.css" />
     <title>Meetup Page Draft</title>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
   </head>
   <body>
-    <div id="app">
-      <div v-for="meetup in meetups">
-        <div class="meetup-cover" :style="meetup.coverStyle">
+    <div id="app" v-cloak>
+      <div v-if="meetup">
+        <div class="meetup-cover" :style="{backgroundImage: makeMeetupCoverLink(meetup.imageId)}">
           <h1 class="meetup-cover__title">{{ meetup.title }}</h1>
         </div>
 
@@ -21,37 +26,38 @@
           <div class="meetup">
             <div class="meetup__content">
               <h3>Описание</h3>
-              <p v-if="meetup.description" class="meetup-description">
-                {{ meetup.description }}
-              </p>
+              <p class="meetup-description">{{ meetup.description }}</p>
+
               <h3>Программа</h3>
               <div class="meetup-agenda">
-                <p v-if="agenda && agenda.length < 1" class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
-                <div class="meetup-agenda__item" v-for="event in agenda">
-                  <div class="meetup-agenda__item-col">
-                    <img
-                      class="icon"
-                      alt="icon"
-                      src="/assets/icons/icon-cal-sm.svg "
-                    />
+                <p v-if="!meetup.agenda" class="meetup-agenda__empty">
+                  Программа пока пуста, но когда-нибудь в ней обязательно
+                  что-нибудь появится!
+                </p>
+                <template v-else>
+                  <div
+                    v-for="event in meetup.agenda"
+                    class="meetup-agenda__item"
+                  >
+                    <div class="meetup-agenda__item-col">
+                      <img
+                        class="icon"
+                        alt="icon"
+                        src="/assets/icons/icon-cal-sm.svg"
+                      />
+                    </div>
+                    <div class="meetup-agenda__item-col">{{ event.startsAt }} - {{ event.endsAt }}</div>
+                    <div class="meetup-agenda__item-col">
+                      <h5 class="meetup-agenda__title">{{ event.title }}</h5>
+                      <p v-if="event.type === 'talk'">
+                        <span>{{ event.speaker }}</span
+                        ><span class="meetup-agenda__dot"></span
+                        ><span class="meetup-agenda__lang">{{ event.language }}</span>
+                      </p>
+                      <p>{{ event.description }}</p>
+                    </div>
                   </div>
-                  <div v-if="event.startsAt" class="meetup-agenda__item-col">
-                    {{ event.startsAt}} - {{ event.endsAt}}
-                  </div>
-                  <div class="meetup-agenda__item-col">
-                    <h5 v-if="event.title" class="meetup-agenda__title">
-                      {{ event.title }}
-                    </h5>
-                    <p v-if="event.type === 'talk'">
-                      <span>{{ event.speaker }}</span
-                      ><span class="meetup-agenda__dot"></span
-                      ><span class="meetup-agenda__lang"
-                        >{{ event.language }}</span
-                      >
-                    </p>
-                    <p v-if="event.description">{{ event.description}}</p>
-                  </div>
-                </div>
+                </template>
               </div>
             </div>
 
@@ -79,9 +85,7 @@
                     alt="icon"
                     src="/assets/icons/icon-cal-lg.svg"
                   />
-                  <time datetime="2020-02-31"
-                    >{{ meetup.getDateTimeString }}</time
-                  >
+                  <time datetime="2020-02-31">{{ meetup.date }}</time>
                 </li>
               </ul>
             </div>
