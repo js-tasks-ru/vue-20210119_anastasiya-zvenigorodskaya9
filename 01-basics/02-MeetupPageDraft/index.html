@@ -18,7 +18,10 @@
   <body>
     <div id="app" v-cloak>
       <div v-if="meetup">
-        <div class="meetup-cover" :style="{backgroundImage: meetupCover}">
+        <div
+          class="meetup-cover"
+          :style="createMeetupCoverLink(meetup.imageId) ? `--bg-url: url('${createMeetupCoverLink(meetup.imageId)}')` : ''"
+        >
           <h1 class="meetup-cover__title">{{ meetup.title }}</h1>
         </div>
 
@@ -53,8 +56,8 @@
                     </div>
                     <div class="meetup-agenda__item-col">
                       <h5 class="meetup-agenda__title">
-                        {{ agendaItemIcons[agendaItem.type] }} {{
-                        agendaItem.title || agendaItemTitles[agendaItem.type] }}
+                        {{ agendaItem.title || agendaItemTitles[agendaItem.type]
+                        }}
                       </h5>
                       <p v-if="agendaItem.type === 'talk'">
                         <span>{{ agendaItem.speaker }}</span
@@ -96,9 +99,7 @@
                     alt="icon"
                     src="/assets/icons/icon-cal-lg.svg"
                   />
-                  <time :datetime="meetup.date"
-                    >{{ localDate }} - {{ meetupTime }}</time
-                  >
+                  <time :datetime="meetup.date">{{ localDate }}</time>
                 </li>
               </ul>
             </div>

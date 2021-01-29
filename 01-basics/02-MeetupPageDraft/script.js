@@ -46,23 +46,14 @@ export const app = new Vue({
   async mounted() {
     // Требуется получить данные митапа с API
     this.meetup = await this.fetchMeetup();
-    return this.meetup;
   },
   computed: {
-    meetupCover() {
-      return this.meetup.imageId
-        ? `url(${API_URL}/images/${this.meetup.imageId})`
-        : null;
-    },
     localDate() {
       return new Date(this.meetup.date).toLocaleString(navigator.language, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       });
-    },
-    meetupTime() {
-      return this.getTimeString(new Date(this.meetup.date));
     },
     agendaItemTitles() {
       return agendaItemTitles;
@@ -76,10 +67,8 @@ export const app = new Vue({
     fetchMeetup() {
       return fetch(`${API_URL}/meetups/${MEETUP_ID}`).then((res) => res.json());
     },
-    getTimeString(date) {
-      const HH = date.getHours().toString().padStart(2, '0');
-      const MIN = date.getMinutes().toString().padStart(2, '0');
-      return `${HH}:${MIN}`;
+    createMeetupCoverLink(imageId) {
+      return `${API_URL}/images/${imageId}`;
     },
   },
 });
