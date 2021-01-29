@@ -7,13 +7,10 @@ const MEETUP_ID = 6;
 const fetchMeetup = () =>
   fetch(`${API_URL}/meetups/${MEETUP_ID}`).then((res) => res.json());
 
-const getDateTimeString = (date) => {
-  const YYYY = date.getUTCFullYear();
-  const MM = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-  const DD = date.getUTCDate().toString().padStart(2, '0');
+const getTimeString = (date) => {
   const HH = date.getHours().toString().padStart(2, '0');
   const MIN = date.getMinutes().toString().padStart(2, '0');
-  return `${YYYY}-${MM}-${DD}, ${HH}:${MIN}`;
+  return `${HH}:${MIN}`;
 };
 
 /**
@@ -57,6 +54,18 @@ export const app = new Vue({
   async mounted() {
     // Требуется получить данные митапа с API
     this.rawMeetup = await fetchMeetup();
+    this.rawMeetup.localeDate = new Date(this.rawMeetup.date).toLocaleString(
+      navigator.language,
+      {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      },
+    );
+    this.rawMeetup.time = getTimeString(new Date(this.rawMeetup.date));
+    console.log('obj', this.rawMeetup);
+    return this.rawMeetup;
+
   },
   computed: {
     meetup() {
@@ -64,29 +73,58 @@ export const app = new Vue({
     },
   },
 
+  // methods: {
+  //   fetchData() {
+  //     return fetch(`${API_URL}/meetups/${MEETUP_ID}`).then((res) => res.json());
+  //   },
+  //   makeMeetupCoverLink(imageId) {
+  //     return ${API_URL}/images/${imageId};
+  //   },
+  // },
+
+  // async created() {
+  //   this.rawMeetup = await this.fetchData();
+  // },
+
   methods: {
     makeMeetupCoverLink(imageId) {
       return `url(${API_URL}/images/${imageId})`;
     },
-    // getMeetupData() {
-    //   return this.rawMeetup.map((meetup) => ({
-    //     ...meetup,
-    //     cover: meetup.imageId
-    //       ? `https://course-vue.javascript.ru/api/images/${meetup.imageId}`
-    //       : undefined,
-    //     coverStyle: meetup.imageId
-    //       ? {
-    //           '--bg-url': `url('https://course-vue.javascript.ru/api/images/${meetup.imageId}')`,
-    //         }
-    //       : {},
-    //     date: new Date(meetup.date),
-    //     localDate: new Date(meetup.date).toLocaleString(navigator.language, {
-    //       year: 'numeric',
-    //       month: 'long',
-    //       day: 'numeric',
-    //     }),
-    //     getDateTimeString: getDateTimeString(new Date(meetup.date)),
-    //   }));
-    // },
+    getMeetupData() {
+      // let obj = this.rawMeetup;
+      // console.log(obj);
+      // let obj = this.meetup;
+      // obj.cover =
+      //   'https://course-vue.javascript.ru/api/images/${this.meetup.imageId}';
+      // obj.localeDate = new Date(this.meetup.date).toLocaleString(
+      //   navigator.language,
+      //   {
+      //     year: 'numeric',
+      //     month: 'long',
+      //     day: 'numeric',
+      //   },
+      // );
+      // obj.dateTime = getDateTimeString(new Date(this.meetup.date));
+      // console.log('obj', obj);
+      // return obj;
+      // return this.rawMeetup.map((meetup) => ({
+      //   ...meetup,
+      //   cover: meetup.imageId
+      //     ? `https://course-vue.javascript.ru/api/images/${meetup.imageId}`
+      //     : undefined,
+      //   coverStyle: meetup.imageId
+      //     ? {
+      //         '--bg-url': `url('https://course-vue.javascript.ru/api/images/${meetup.imageId}')`,
+      //       }
+      //     : {},
+      //   date: new Date(meetup.date),
+      //   localDate: new Date(meetup.date).toLocaleString(navigator.language, {
+      //     year: 'numeric',
+      //     month: 'long',
+      //     day: 'numeric',
+      //   }),
+      //   getDateTimeString: getDateTimeString(new Date(meetup.date)),
+      // }));
+    },
   },
 });
